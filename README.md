@@ -162,6 +162,20 @@ Deploy the `dist/` folder to Netlify.
 --lm-gray: #4B4646
 ```
 
+## 📋 Processor Schemas
+
+Processor application schemas define how to auto-fill processor applications from merchant data. 
+
+**Infrastructure is built, but NO hardcoded processor data yet.**  
+Schemas will be added by Kingsley via Admin Panel or SQL scripts.
+
+See `docs/PROCESSOR_SCHEMAS.md` for full documentation on:
+- Schema structure
+- Available merchant fields
+- How to add processors
+- Auto-fill logic
+- Validation rules
+
 ## 📦 Phase 1 MVP Checklist
 
 **✅ Completed:**
@@ -171,6 +185,7 @@ Deploy the `dist/` folder to Netlify.
 - [x] React Router configured
 - [x] Database schema (SQL migration)
 - [x] Matching engine logic
+- [x] **Processor schema infrastructure** (helpers + validation)
 - [x] Landing page
 - [x] Login/SignUp pages
 - [x] Protected route guard
