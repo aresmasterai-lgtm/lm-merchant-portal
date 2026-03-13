@@ -166,14 +166,27 @@
 
 ## 📊 Launch Processors
 
-**Phase 1 MVP will support 2 processors:**
-1. Wholesale Payments / Merrick Bank
-2. Nuvei Technologies
+**Phase 1 processors - BOTH COMPLETE ✅**
 
-**Application schemas needed from Kingsley:**
-- Field mappings for each processor
-- Required vs. optional fields
-- Format requirements
+### 1. **Nuvei Technologies**
+- ✅ Application schema: 10 sections, 100+ fields
+- ✅ Industries: Restaurant, Retail, E-commerce, Professional Services, Healthcare, Hospitality
+- ✅ High-Risk: No
+- ✅ Volume: $0 - Unlimited
+- ✅ Documentation: `docs/NUVEI_SCHEMA.md`
+- ✅ SQL: `supabase/processors/nuvei_technologies.sql`
+
+### 2. **Wholesale Payments / Merrick Bank**
+- ✅ Application schema: 7 sections, 80+ fields
+- ✅ Industries: Restaurant, Retail, E-commerce, Professional Services, Healthcare, Hospitality, Automotive, Services
+- ✅ **High-Risk: Yes** (key differentiator!)
+- ✅ Volume: $0 - Unlimited
+- ✅ Documentation: `docs/WHOLESALE_PAYMENTS_SCHEMA.md`
+- ✅ SQL: `supabase/processors/wholesale_payments.sql`
+
+**These two processors complement each other perfectly:**
+- **Nuvei:** Standard risk merchants, comprehensive onboarding
+- **Wholesale Payments:** High-risk merchants, flexible sales tracking
 
 **Phase 2 will add 15+ additional processors.**
 
