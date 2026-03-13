@@ -188,6 +188,162 @@ export const db = {
       .select('*')
       .eq('active', true);
     return { data, error };
+  },
+
+  // Merchant Owners
+  getOwners: async (merchantId) => {
+    const { data, error } = await supabase
+      .from('merchant_owners')
+      .select('*')
+      .eq('merchant_id', merchantId)
+      .order('owner_number', { ascending: true });
+    return { data, error };
+  },
+
+  upsertOwner: async (merchantId, ownerNumber, ownerData) => {
+    const { data, error } = await supabase
+      .from('merchant_owners')
+      .upsert([{
+        merchant_id: merchantId,
+        owner_number: ownerNumber,
+        ...ownerData
+      }], {
+        onConflict: 'merchant_id,owner_number'
+      })
+      .select()
+      .single();
+    return { data, error };
+  },
+
+  // Bank Accounts
+  getBankAccounts: async (merchantId) => {
+    const { data, error } = await supabase
+      .from('merchant_bank_accounts')
+      .select('*')
+      .eq('merchant_id', merchantId);
+    return { data, error };
+  },
+
+  upsertBankAccount: async (merchantId, accountType, accountData) => {
+    // First check if account exists
+    const { data: existing } = await supabase
+      .from('merchant_bank_accounts')
+      .select('id')
+      .eq('merchant_id', merchantId)
+      .eq('account_type', accountType)
+      .single();
+
+    if (existing) {
+      // Update existing
+      const { data, error } = await supabase
+        .from('merchant_bank_accounts')
+        .update(accountData)
+        .eq('id', existing.id)
+        .select()
+        .single();
+      return { data, error };
+    } else {
+      // Insert new
+      const { data, error } = await supabase
+        .from('merchant_bank_accounts')
+        .insert([{
+          merchant_id: merchantId,
+          account_type: accountType,
+          ...accountData
+        }])
+        .select()
+        .single();
+      return { data, error };
+    }
+  },
+
+  // Equipment
+  getEquipment: async (merchantId) => {
+    const { data, error } = await supabase
+      .from('merchant_equipment')
+      .select('*')
+      .eq('merchant_id', merchantId)
+      .single();
+    return { data, error };
+  },
+
+  upsertEquipment: async (merchantId, equipmentData) => {
+    // Check if equipment record exists
+    const { data: existing } = await supabase
+      .from('merchant_equipment')
+      .select('id')
+      .eq('merchant_id', merchantId)
+      .single();
+
+    if (existing) {
+      // Update existing
+      const { data, error } = await supabase
+        .from('merchant_equipment')
+        .update(equipmentData)
+        .eq('id', existing.id)
+        .select()
+        .single();
+      return { data, error };
+    } else {
+      // Insert new
+      const { data, error } = await supabase
+        .from('merchant_equipment')
+        .insert([{
+          merchant_id: merchantId,
+          ...equipmentData
+        }])
+        .select()
+        .single();
+      return { data, error };
+    }
+  },
+
+  // Control Panel Access
+  getControlPanelAccess: async (merchantId, processorId = null) => {
+    let query = supabase
+      .from('merchant_control_panel_access')
+      .select('*')
+      .eq('merchant_id', merchantId);
+    
+    if (processorId) {
+      query = query.eq('processor_id', processorId);
+    }
+
+    const { data, error } = await query.single();
+    return { data, error };
+  },
+
+  upsertControlPanelAccess: async (merchantId, processorId, accessData) => {
+    // Check if record exists
+    const { data: existing } = await supabase
+      .from('merchant_control_panel_access')
+      .select('id')
+      .eq('merchant_id', merchantId)
+      .eq('processor_id', processorId)
+      .single();
+
+    if (existing) {
+      // Update existing
+      const { data, error } = await supabase
+        .from('merchant_control_panel_access')
+        .update(accessData)
+        .eq('id', existing.id)
+        .select()
+        .single();
+      return { data, error };
+    } else {
+      // Insert new
+      const { data, error } = await supabase
+        .from('merchant_control_panel_access')
+        .insert([{
+          merchant_id: merchantId,
+          processor_id: processorId,
+          ...accessData
+        }])
+        .select()
+        .single();
+      return { data, error };
+    }
   }
 };
 
