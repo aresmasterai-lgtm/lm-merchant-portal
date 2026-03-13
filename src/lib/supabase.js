@@ -344,6 +344,47 @@ export const db = {
         .single();
       return { data, error };
     }
+  },
+
+  // Card Types
+  getCardTypes: async (merchantId) => {
+    const { data, error } = await supabase
+      .from('merchant_card_types')
+      .select('*')
+      .eq('merchant_id', merchantId)
+      .single();
+    return { data, error };
+  },
+
+  upsertCardTypes: async (merchantId, cardTypesData) => {
+    // Check if record exists
+    const { data: existing } = await supabase
+      .from('merchant_card_types')
+      .select('id')
+      .eq('merchant_id', merchantId)
+      .single();
+
+    if (existing) {
+      // Update existing
+      const { data, error } = await supabase
+        .from('merchant_card_types')
+        .update(cardTypesData)
+        .eq('id', existing.id)
+        .select()
+        .single();
+      return { data, error };
+    } else {
+      // Insert new
+      const { data, error } = await supabase
+        .from('merchant_card_types')
+        .insert([{
+          merchant_id: merchantId,
+          ...cardTypesData
+        }])
+        .select()
+        .single();
+      return { data, error };
+    }
   }
 };
 
